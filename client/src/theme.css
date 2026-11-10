@@ -1,0 +1,318 @@
+@import "tailwindcss";
+@import "tailwindcss-safe-area";
+
+@theme {
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+  --text-4xl: 38px;
+}
+
+:root {
+  color-scheme: light dark;
+  --bg: #f7f1e8;
+  --surface: #fffaf2;
+  --surface-deep: #eee2d2;
+  --text: #2b1812;
+  --dim: #725f55;
+  --border: #d9c6ac;
+  --accent: #c86a3b;
+  --sage: #657568;
+  --danger: #a33c35;
+  /* Text-on-fill tokens: primary buttons and selected chips take their
+     foreground from these, never a fixed near-white — in dark mode the
+     fills lighten, so the text has to darken with them. */
+  --button-bg: #2b1812;
+  --button-text: #fff8ef;
+  --accent-text: #fff8ef;
+  --danger-text: #ffffff;
+  --radius: 14px;
+  --shadow: 0 18px 50px rgba(65, 37, 24, 0.08);
+  --space-surface: var(--surface);
+  --space-surface-alt: var(--surface-deep);
+  --space-muted: var(--dim);
+  --space-border: var(--border);
+  --space-accent: var(--accent);
+  font-family: "Avenir Next", Avenir, ui-sans-serif, system-ui, sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1b1512;
+    --surface: #271e1a;
+    --surface-deep: #342822;
+    --text: #f7ede0;
+    --dim: #bda99c;
+    --border: #4b3930;
+    --accent: #e58451;
+    --sage: #9aac9d;
+    --danger: #ef8d83;
+    --button-bg: #f7ede0;
+    --button-text: #2b1812;
+    --accent-text: #27150c;
+    --danger-text: #33120e;
+    --shadow: 0 18px 50px rgba(0, 0, 0, 0.2);
+  }
+}
+
+* { box-sizing: border-box; }
+html { background: var(--bg); }
+body { margin: 0; min-width: 320px; background: var(--bg); color: var(--text); }
+button, input, textarea { font: inherit; }
+button { color: inherit; }
+svg { width: 20px; height: 20px; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.app-shell { min-height: 100vh; background: var(--bg); }
+main { display: flex; flex-direction: column; width: min(100%, 1080px); margin: 0 auto; padding: calc(env(safe-area-inset-top) + 24px) 18px calc(env(safe-area-inset-bottom) + 64px); }
+
+/* Phone/tablet: the entry-layout wrappers vanish (display: contents) and
+   flex order keeps the reading order — entry box, rankings, progress,
+   journal — exactly as the sections have always stacked. */
+.entry-layout, .entry-column, .progress-column { display: contents; }
+.morning-intro { order: 1; }
+.composer { order: 2; }
+.matchup-section { order: 3; }
+.rankings-section { order: 4; }
+.progress-section { order: 5; }
+.journal-section { order: 6; }
+
+.morning-intro { max-width: 680px; padding: 20px 2px 26px; }
+.date-line { margin: 0 0 12px; color: var(--accent); font-size: 13px; font-weight: 650; letter-spacing: .04em; }
+.morning-intro h1 { margin: 0; max-width: 560px; font-family: Georgia, "Times New Roman", serif; font-size: clamp(38px, 10vw, 66px); line-height: .98; letter-spacing: -.045em; font-weight: 500; }
+.morning-intro > p:last-child { margin: 18px 0 0; max-width: 500px; color: var(--dim); font-size: 16px; line-height: 1.55; }
+
+.composer { background: var(--surface); box-shadow: var(--shadow); border-radius: 24px 24px 8px 8px; overflow: hidden; }
+.photo-strip { display: flex; gap: 10px; overflow-x: auto; padding: 10px; min-height: 104px; background: var(--surface-deep); scrollbar-width: none; }
+.photo-strip::-webkit-scrollbar { display: none; }
+.photo-draft, .add-photo { position: relative; flex: 0 0 84px; height: 84px; border-radius: 11px; overflow: hidden; }
+.photo-draft img { width: 100%; height: 100%; object-fit: cover; }
+.photo-draft button { position: absolute; top: 6px; right: 6px; display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 50%; color: #fff; background: rgba(25, 15, 11, .72); }
+.photo-draft button svg { width: 15px; height: 15px; }
+.add-photo { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; border: 1px dashed color-mix(in srgb, var(--text) 30%, transparent); background: color-mix(in srgb, var(--surface) 72%, transparent); cursor: pointer; color: var(--dim); }
+.add-photo svg { width: 24px; height: 24px; }
+.add-photo span { font-size: 12px; font-weight: 650; }
+
+.when-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding: 12px 16px 4px; }
+.when-row label { font-size: 14px; font-weight: 700; }
+.when-row input { min-width: 0; max-width: 220px; border: 0; border-bottom: 1px solid var(--border); padding: 6px 2px; color: var(--text); background: transparent; }
+.detail-grid { display: grid; gap: 0; padding: 4px 16px 0; }
+.input-field { display: block; padding: 9px 0; border-bottom: 1px solid var(--border); }
+.input-field > span, .notes-field > span { display: flex; align-items: center; gap: 8px; margin-bottom: 7px; font-size: 13px; font-weight: 700; }
+.input-field > span svg { width: 16px; height: 16px; color: var(--accent); }
+.input-field small, .notes-field small { margin-left: auto; color: var(--dim); font-size: 11px; font-weight: 500; }
+.input-field input, .notes-field textarea { width: 100%; border: 0; padding: 5px 0; outline: none; color: var(--text); background: transparent; }
+.input-field input::placeholder, .notes-field textarea::placeholder { color: color-mix(in srgb, var(--dim) 72%, transparent); }
+
+.outcome-section { margin-top: 12px; padding: 14px 16px 2px; background: color-mix(in srgb, var(--sage) 10%, var(--surface)); border-top: 1px solid color-mix(in srgb, var(--sage) 28%, transparent); }
+.section-heading { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.section-heading > div { display: flex; flex-direction: column; gap: 3px; }
+.section-heading span { font-family: Georgia, "Times New Roman", serif; font-size: 22px; }
+.section-heading small { color: var(--dim); font-size: 12px; }
+.section-heading > svg { width: 28px; height: 28px; color: var(--sage); }
+.rating-field { margin: 0; padding: 9px 0 11px; border: 0; border-bottom: 1px solid color-mix(in srgb, var(--border) 70%, transparent); }
+.rating-copy { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 7px; }
+.rating-copy legend { padding: 0; font-size: 14px; font-weight: 700; }
+.rating-copy span { color: var(--dim); font-size: 11px; }
+.rating-scale { display: grid; grid-template-columns: repeat(5, 1fr); gap: 7px; }
+.rating-scale button { min-height: 40px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface); font-family: Georgia, "Times New Roman", serif; font-size: 18px; cursor: pointer; }
+.rating-scale button.selected { border-color: var(--accent); background: var(--accent); color: var(--accent-text); }
+.notes-field { display: block; padding: 12px 0 6px; }
+.notes-field textarea { resize: vertical; min-height: 58px; line-height: 1.5; }
+.form-message { margin: 10px 16px 0; padding: 12px 14px; border-radius: 8px; font-size: 13px; }
+.form-message.error { color: var(--danger); background: color-mix(in srgb, var(--danger) 11%, transparent); }
+.form-message.success { color: var(--sage); background: color-mix(in srgb, var(--sage) 11%, transparent); }
+.save-button { width: calc(100% - 32px); margin: 14px 16px; min-height: 48px; border: 0; border-radius: 10px; color: var(--button-text); background: var(--button-bg); font-weight: 750; letter-spacing: .01em; cursor: pointer; }
+.save-button:disabled { opacity: .55; cursor: wait; }
+
+.progress-section, .journal-section, .rankings-section { padding-top: 58px; }
+
+.art-score-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 52px; }
+.art-score { display: grid; place-items: center; min-width: 52px; height: 40px; padding: 0 8px; border-radius: 9px; color: #fff8ef; font-family: Georgia, "Times New Roman", serif; font-size: 19px; font-weight: 600; background: var(--dim); }
+.art-score.great { background: #4c7a4f; }
+.art-score.good { background: var(--sage); }
+.art-score.mid { background: #b07f2e; }
+.art-score.low { background: var(--danger); }
+.art-score-wrap small { color: var(--dim); font-size: 10px; text-align: center; line-height: 1.25; }
+
+.matchup-section { margin-top: 34px; padding: 22px 18px; background: var(--surface); box-shadow: var(--shadow); border-radius: 18px; }
+.matchup-hint, .rankings-intro { margin: 0 0 16px; max-width: 560px; color: var(--dim); font-size: 14px; line-height: 1.55; }
+.matchup-arena { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.matchup-card { display: flex; flex-direction: column; gap: 0; padding: 0; overflow: hidden; border: 2px solid var(--border); border-radius: 14px; background: var(--surface); text-align: left; cursor: pointer; }
+.matchup-card:hover, .matchup-card:focus-visible { border-color: var(--accent); }
+.matchup-card:disabled { opacity: .6; cursor: wait; }
+.matchup-card img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+.matchup-meta { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px 4px; }
+.matchup-meta strong { font-family: Georgia, "Times New Roman", serif; font-size: 16px; font-weight: 500; }
+.matchup-meta small { color: var(--dim); font-size: 11px; }
+.matchup-pick { padding: 6px 12px 12px; color: var(--accent); font-size: 12px; font-weight: 700; }
+.matchup-vs { position: absolute; top: 38%; left: 50%; transform: translate(-50%, -50%); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; color: var(--button-text); background: var(--button-bg); font-family: Georgia, "Times New Roman", serif; font-style: italic; font-size: 15px; pointer-events: none; }
+.matchup-actions { display: flex; gap: 18px; margin-top: 16px; }
+.matchup-actions button { padding: 0; border: 0; border-bottom: 1px solid currentColor; background: transparent; color: var(--dim); font-size: 13px; cursor: pointer; }
+
+.ranked-position { align-self: start; padding-top: 4px; color: var(--accent); font-family: Georgia, "Times New Roman", serif; font-size: 17px; text-align: center; }
+.unranked-heading { margin: 26px 0 12px; color: var(--dim); font-family: Georgia, "Times New Roman", serif; font-size: 17px; font-weight: 500; }
+.rankings-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 14px; margin-top: 18px; }
+.rank-start { min-height: 46px; padding: 0 20px; border: 0; border-radius: 10px; color: var(--button-text); background: var(--button-bg); font-weight: 700; cursor: pointer; }
+.rank-start:disabled { opacity: .5; cursor: default; }
+.rank-reset { padding: 0; border: 0; border-bottom: 1px solid currentColor; background: transparent; color: var(--danger); font-size: 13px; font-weight: 700; cursor: pointer; }
+.reset-confirm { display: inline-flex; align-items: center; flex-wrap: wrap; gap: 8px; font-size: 13px; color: var(--dim); }
+.reset-confirm button { border: 1px solid var(--border); padding: 7px 10px; border-radius: 6px; background: var(--surface); cursor: pointer; }
+.reset-confirm button.danger { border-color: var(--danger); color: var(--danger-text); background: var(--danger); font-weight: 700; }
+.art-hero { display: flex; align-items: center; gap: 16px; margin: 2px 0 14px; padding: 14px; border: 1px solid var(--border); border-radius: 12px; background: color-mix(in srgb, var(--sage) 9%, var(--surface)); }
+.art-score.big { min-width: 76px; height: 60px; padding: 0 12px; border-radius: 12px; font-size: 30px; }
+.art-hero-copy { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.art-hero-label { color: var(--dim); font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; }
+.art-hero-copy strong { font-family: Georgia, "Times New Roman", serif; font-size: 23px; font-weight: 600; line-height: 1.15; }
+.art-hero-copy small { color: var(--dim); font-size: 12px; }
+.rank-button { display: inline-flex; align-items: center; margin-top: 12px; margin-right: 16px; padding: 0; border: 0; border-bottom: 1px solid currentColor; background: transparent; color: var(--accent); font-size: 12px; font-weight: 700; cursor: pointer; }
+.rank-button:disabled { opacity: .5; cursor: default; }
+.journal-heading { display: flex; align-items: end; justify-content: space-between; gap: 16px; margin-bottom: 20px; }
+.journal-heading p { margin: 0 0 5px; color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; }
+.journal-heading h2 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 30px; font-weight: 500; letter-spacing: -.025em; }
+.journal-heading > span { color: var(--dim); font-size: 13px; }
+.empty-state { padding: 30px 2px 26px; border-top: 1px solid var(--border); }
+.empty-state > span { display: inline-block; margin-bottom: 28px; color: var(--accent); font-family: Georgia, "Times New Roman", serif; font-size: 48px; }
+.empty-state h3 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: 25px; font-weight: 500; }
+.empty-state p { margin: 8px 0 0; max-width: 430px; color: var(--dim); line-height: 1.55; }
+.progress-intro { margin: -6px 0 16px; max-width: 460px; color: var(--dim); font-size: 14px; line-height: 1.55; }
+.progress-band { display: grid; grid-template-columns: 1fr; gap: 1px; overflow: hidden; border-radius: 8px; background: var(--border); }
+.progress-number, .progress-direction { min-height: 150px; padding: 22px; background: var(--surface); }
+.progress-number { display: flex; align-items: end; gap: 16px; }
+.progress-number strong { font-family: Georgia, "Times New Roman", serif; font-size: 64px; line-height: .8; font-weight: 500; letter-spacing: -.05em; }
+.progress-number span { color: var(--dim); font-size: 12px; line-height: 1.35; }
+.progress-direction { display: flex; flex-direction: column; justify-content: center; }
+.progress-direction > span { margin-bottom: 14px; color: var(--dim); font-size: 12px; }
+.progress-direction strong { font-family: Georgia, "Times New Roman", serif; font-size: 26px; font-weight: 500; }
+.progress-direction strong.positive { color: var(--sage); }
+.progress-direction strong.negative { color: var(--danger); }
+.progress-direction small { margin-top: 5px; color: var(--dim); }
+
+.loading-copy { color: var(--dim); }
+.query-error { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px; border: 1px solid var(--border); }
+.query-error p { margin: 0; }
+.query-error button { border: 0; border-bottom: 1px solid currentColor; background: transparent; cursor: pointer; }
+.journal-list { border-top: 1px solid var(--border); }
+.journal-entry { border-bottom: 1px solid var(--border); }
+.entry-summary { width: 100%; display: grid; grid-template-columns: 30px 66px minmax(0, 1fr) auto; gap: 11px; align-items: center; padding: 15px 0; border: 0; text-align: left; background: transparent; cursor: pointer; }
+.entry-index { align-self: start; padding-top: 4px; color: var(--accent); font-family: Georgia, "Times New Roman", serif; font-size: 13px; }
+.entry-thumb { width: 66px; height: 66px; border-radius: 7px; object-fit: cover; background: var(--surface-deep); }
+.entry-thumb.placeholder { display: grid; place-items: center; color: var(--dim); }
+.entry-main { min-width: 0; }
+.entry-main strong, .entry-main span, .entry-main small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.entry-main strong { font-family: Georgia, "Times New Roman", serif; font-size: 18px; font-weight: 500; }
+.entry-main span { margin-top: 3px; color: var(--dim); font-size: 12px; }
+.entry-main small { margin-top: 7px; color: var(--sage); font-size: 12px; }
+.score-mark { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; color: var(--button-text); background: var(--button-bg); font-family: Georgia, "Times New Roman", serif; font-size: 18px; }
+.score-mark.empty { color: var(--dim); background: var(--surface-deep); }
+.entry-detail { padding: 0 0 20px 41px; }
+.saved-photos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 16px; }
+.saved-photo { display: block; padding: 0; border: 0; border-radius: 7px; overflow: hidden; background: var(--surface-deep); cursor: zoom-in; }
+.saved-photo img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
+
+.photo-viewer { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; background: rgba(12, 7, 5, .92); }
+.photo-viewer-frame { position: relative; display: flex; flex-direction: column; width: 100%; height: 100%; background: #17100d; }
+.photo-viewer-stage { flex: 1; min-height: 0; display: grid; place-items: center; overflow: hidden; touch-action: none; cursor: zoom-in; }
+.photo-viewer-stage img { max-width: 100%; max-height: 100%; object-fit: contain; user-select: none; -webkit-user-select: none; will-change: transform; }
+.photo-viewer-close { position: absolute; top: calc(env(safe-area-inset-top) + 12px); right: 14px; display: grid; place-items: center; width: 42px; height: 42px; padding: 0; border: 0; border-radius: 50%; color: #fff8ef; background: rgba(255, 248, 239, .14); cursor: pointer; }
+.photo-viewer-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 14px calc(env(safe-area-inset-bottom) + 12px); color: #f7ede0; }
+.photo-viewer-count { font-size: 13px; color: color-mix(in srgb, #f7ede0 72%, transparent); }
+.photo-viewer-controls { display: flex; align-items: center; gap: 8px; }
+.photo-viewer-controls button { min-width: 42px; min-height: 42px; padding: 0 10px; border: 0; border-radius: 9px; color: #fff8ef; background: rgba(255, 248, 239, .14); font-size: 17px; cursor: pointer; }
+.photo-viewer-controls button:disabled { opacity: .38; cursor: default; }
+
+@media (min-width: 720px) {
+  .photo-viewer { padding: 4vh 4vw; }
+  .photo-viewer-frame { max-width: 1060px; max-height: 92vh; border-radius: 18px; overflow: hidden; box-shadow: 0 30px 90px rgba(0, 0, 0, .5); }
+}
+.entry-detail dl { display: grid; grid-template-columns: repeat(3, 1fr); margin: 0; padding: 12px 0; border-block: 1px solid var(--border); }
+.entry-detail dl div { padding-left: 12px; border-left: 1px solid var(--border); }
+.entry-detail dl div:first-child { padding-left: 0; border-left: 0; }
+.entry-detail dt { color: var(--dim); font-size: 11px; }
+.entry-detail dd { margin: 5px 0 0; font-family: Georgia, "Times New Roman", serif; font-size: 22px; }
+.entry-notes { margin: 16px 0; white-space: pre-wrap; line-height: 1.55; }
+.delete-button { display: inline-flex; align-items: center; gap: 7px; margin-top: 16px; padding: 0; border: 0; color: var(--dim); background: transparent; font-size: 12px; cursor: pointer; }
+.delete-button svg { width: 15px; height: 15px; }
+.delete-confirm { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-top: 16px; padding: 12px; background: var(--surface-deep); border-radius: 7px; }
+.delete-confirm span { margin-right: auto; font-size: 13px; }
+.delete-confirm button { border: 0; padding: 8px 10px; border-radius: 6px; background: var(--surface); cursor: pointer; }
+.delete-confirm button.danger { color: var(--danger-text); background: var(--danger); }
+
+.entry-meta-line { margin: 10px 0 0; color: var(--dim); font-size: 13px; }
+.entry-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 10px 18px; margin-top: 14px; }
+.edit-button { display: inline-flex; align-items: center; gap: 7px; padding: 0; border: 0; border-bottom: 1px solid currentColor; color: var(--accent); background: transparent; font-size: 12px; font-weight: 700; cursor: pointer; }
+.edit-button svg { width: 15px; height: 15px; }
+.entry-rank-button { margin-top: 0; margin-right: 0; }
+
+.edit-form { display: flex; flex-direction: column; }
+.edit-form-heading { display: flex; flex-direction: column; gap: 2px; margin-bottom: 12px; }
+.edit-form-heading strong { font-family: Georgia, "Times New Roman", serif; font-size: 20px; font-weight: 600; }
+.edit-form-heading span { color: var(--dim); font-size: 12px; }
+.edit-label { display: flex; align-items: baseline; gap: 8px; font-size: 13px; font-weight: 700; }
+.edit-label small { color: var(--dim); font-size: 11px; font-weight: 500; }
+.edit-photo-section { margin-bottom: 6px; }
+.edit-photo-empty { margin: 8px 0 0; color: var(--dim); font-size: 13px; line-height: 1.5; }
+.edit-photo-strip { display: flex; gap: 10px; overflow-x: auto; padding: 10px 0 4px; scrollbar-width: none; }
+.edit-photo-strip::-webkit-scrollbar { display: none; }
+.edit-photo { position: relative; flex: 0 0 84px; height: 84px; border-radius: 11px; overflow: visible; background: var(--surface-deep); }
+.edit-photo img { width: 84px; height: 84px; border-radius: 11px; object-fit: cover; display: block; }
+.edit-photo-remove { position: absolute; top: -6px; right: -6px; display: grid; place-items: center; width: 26px; height: 26px; padding: 0; border: 0; border-radius: 50%; color: #fff; background: rgba(25, 15, 11, .82); cursor: pointer; z-index: 2; }
+.edit-photo-remove svg { width: 13px; height: 13px; }
+.edit-photo-badge { position: absolute; top: 6px; left: 6px; padding: 2px 6px; border-radius: 999px; color: var(--accent-text); background: var(--accent); font-size: 10px; font-weight: 700; }
+.edit-photo-move { position: absolute; left: 50%; bottom: 6px; transform: translateX(-50%); display: flex; gap: 4px; }
+.edit-photo-move button { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; border: 0; border-radius: 50%; color: #fff; background: rgba(25, 15, 11, .72); font-size: 16px; line-height: 1; cursor: pointer; }
+.edit-photo-move button:disabled { opacity: .35; cursor: default; }
+.edit-photo-add { display: flex; gap: 10px; padding-top: 10px; }
+.edit-add-photo { flex: 0 0 84px; height: 84px; }
+.edit-when { padding-inline: 0; }
+.edit-detail-grid { padding-inline: 0; }
+.edit-ratings { margin-top: 4px; }
+.edit-actions { display: flex; align-items: center; gap: 14px; margin-top: 6px; }
+.edit-save { width: auto; flex: 1 1 auto; margin: 10px 0; padding: 0 18px; }
+.edit-cancel { padding: 0; border: 0; border-bottom: 1px solid currentColor; background: transparent; color: var(--dim); font-size: 13px; font-weight: 700; cursor: pointer; }
+.edit-cancel:disabled { opacity: .55; cursor: wait; }
+
+button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 42%, transparent); outline-offset: 2px; }
+
+@media (min-width: 720px) {
+  main { padding-inline: 28px; padding-top: calc(env(safe-area-inset-top) + 34px); }
+  .composer { border-radius: 28px 28px 10px 10px; }
+  .detail-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+  .input-field { border-bottom: 0; }
+  .progress-band { grid-template-columns: 1.2fr .8fr; }
+  .saved-photos { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (min-width: 980px) {
+  /* Desktop: the entry box (intro + composer + any matchup session) and
+     Your progress form a two-column row. Progress is sticky inside its
+     own plain column wrapper, and that wrapper is exactly as tall as the
+     entry column — so the panel floats alongside the entry box and then
+     stops, settling at the bottom of the entry box, instead of following
+     the rankings and journal down the rest of the page. */
+  .entry-layout { display: grid; order: 1; grid-template-columns: minmax(0, 1.2fr) minmax(330px, .8fr); column-gap: 54px; }
+  .entry-column { display: flex; flex-direction: column; min-width: 0; }
+  .progress-column { display: block; min-width: 0; }
+  .progress-section { position: sticky; top: 20px; padding-top: 76px; }
+  .rankings-section { order: 2; }
+  .journal-section { order: 3; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
